@@ -1,14 +1,15 @@
 """
 Execution orchestration.
 
-The Executor coordinates runtime execution and records
-execution lifecycle events.
+The Executor coordinates runtime execution,
+records lifecycle events, and produces execution results.
 """
 
 from __future__ import annotations
 
 from prooflight.events import Event
 from prooflight.execution.context import ExecutionContext
+from prooflight.execution.result import ExecutionResult
 from prooflight.runtime import Runtime
 
 
@@ -23,11 +24,6 @@ class Executor:
     ) -> None:
         """
         Initialize executor.
-
-        Parameters
-        ----------
-        runtime:
-            Concrete runtime implementation.
         """
 
         self.runtime = runtime
@@ -35,23 +31,14 @@ class Executor:
     def execute(
         self,
         context: ExecutionContext,
-    ) -> None:
+    ) -> ExecutionResult:
         """
-        Execute one experiment.
+        Execute one experiment lifecycle.
 
-        Lifecycle:
-
-        execution.started
-              |
-              v
-        runtime.execute()
-              |
-              v
-        execution.completed
-
-        If execution fails:
-
-        execution.failed
+        Returns
+        -------
+        ExecutionResult
+            Final execution outcome.
         """
 
         context.recorder.record(
@@ -61,7 +48,7 @@ class Executor:
         )
 
         try:
-            self.runtime.execute(context)
+            output = self.runtime.execute(context)
 
         except Exception as exc:
             context.recorder.record(
@@ -74,10 +61,18 @@ class Executor:
                 )
             )
 
-            raise
+            return ExecutionResult(
+                status="failed",
+                error=str(exc),
+            )
 
         context.recorder.record(
             Event(
                 name="execution.completed",
             )
+        )
+
+        return ExecutionResult(
+            status="completed",
+            output=output,
         )

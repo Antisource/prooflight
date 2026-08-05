@@ -7,8 +7,10 @@ of an experiment execution.
 
 from .context import ExecutionContext
 from .executor import Executor
+from .result import ExecutionResult
 
 __all__ = [
     "ExecutionContext",
     "Executor",
+    "ExecutionResult",
 ]
