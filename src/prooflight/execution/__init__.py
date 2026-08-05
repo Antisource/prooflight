@@ -6,7 +6,9 @@ of an experiment execution.
 """
 
 from .context import ExecutionContext
+from .executor import Executor
 
 __all__ = [
     "ExecutionContext",
+    "Executor",
 ]
