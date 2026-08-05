@@ -317,42 +317,39 @@ Completed:
 
 ---
 
-## Milestone 2: Execution Runtime
+## Milestone 2: Execution Core ✅
 
-Planned:
+Completed:
 
 - runtime abstraction
-- model adapters
-- asynchronous execution
-- agent interfaces
-- environment interfaces
-- event model
+- execution context
+- executor orchestration
+- immutable event model
+- execution recorder
+- lifecycle event tracking
+- execution result model
 
 Architecture:
 
-```
 Experiment
-
       |
       ▼
-
-Runtime Executor
-
+ExecutionContext
       |
       ▼
-
-Agent
-
+Executor
       |
-      ▼
+      +----------------+
+      |                |
+      ▼                ▼
+Runtime          Recorder
+                       |
+                       ▼
+                    Events
 
-Environment
+Executor returns:
 
-      |
-      ▼
-
-Events
-```
+ExecutionResult
 
 ---
 
