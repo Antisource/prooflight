@@ -74,7 +74,7 @@ Experiment
 
 # Current Status
 
-Prooflight is currently in **Milestone 1: Foundation Layer**.
+Prooflight is currently in **Milestone 2: Execution Core**.
 
 Implemented:
 
@@ -87,6 +87,13 @@ Implemented:
 - static type checking
 - linting and formatting
 - CI-ready development workflow
+- runtime abstraction
+- execution context
+- execution orchestration
+- immutable execution events
+- execution recorder
+- lifecycle event tracking
+- structured execution results
 
 The current implementation establishes the core abstraction that future evaluation components will build upon:
 
@@ -185,14 +192,22 @@ Reproducibility is treated as a first-class engineering requirement.
 
 ## 4. Observability
 
-Future versions will record:
+Prooflight treats execution history as a first-class artifact.
 
-- execution traces
-- agent decisions
-- tool usage
-- failures
+Current capabilities include:
+
+- execution lifecycle events
+- ordered event recording
+- execution failure tracking
+- structured execution outcomes
+
+Future versions will extend this into:
+
+- agent trajectories
+- tool interactions
 - resource consumption
-- evaluation outcomes
+- evaluation metrics
+- replay systems
 
 The goal is that every evaluation result can be reconstructed.
 
@@ -208,13 +223,43 @@ prooflight/
 ├── src/
 │   └── prooflight/
 │       ├── __init__.py
-│       └── domain/
+│       │
+│       ├── domain/
+│       │   ├── __init__.py
+│       │   └── experiment.py
+│       │
+│       ├── events/
+│       │   ├── __init__.py
+│       │   └── event.py
+│       │
+│       ├── recorder/
+│       │   ├── __init__.py
+│       │   └── recorder.py
+│       │
+│       ├── execution/
+│       │   ├── __init__.py
+│       │   ├── context.py
+│       │   ├── executor.py
+│       │   └── result.py
+│       │
+│       └── runtime/
 │           ├── __init__.py
-│           └── experiment.py
+│           └── runtime.py
 │
 ├── tests/
-│   └── domain/
-│       └── test_experiment.py
+│   ├── domain/
+│   │   └── test_experiment.py
+│   │
+│   ├── events/
+│   │   └── test_event.py
+│   │
+│   ├── recorder/
+│   │   └── test_recorder.py
+│   │
+│   └── execution/
+│       ├── test_context.py
+│       ├── test_executor.py
+│       └── test_result.py
 │
 ├── .github/
 │   └── workflows/
@@ -291,11 +336,13 @@ Current tests verify:
 - seed validation
 - path normalization
 - experiment immutability
+- event validation
+- recorder behaviour
+- execution lifecycle
+- execution result handling
 
 Future tests will cover:
 
-- runtime execution
-- event generation
 - benchmark execution
 - telemetry
 - replay
@@ -329,7 +376,9 @@ Completed:
 - lifecycle event tracking
 - execution result model
 
-Architecture:
+### Execution Architecture
+
+Milestone 2 establishes the execution foundation:
 
 Experiment
       |
@@ -350,6 +399,22 @@ Runtime          Recorder
 Executor returns:
 
 ExecutionResult
+
+The separation allows Prooflight to distinguish between:
+
+**Execution history**
+
+"What happened?"
+
+Captured through events.
+
+and:
+
+**Execution outcome**
+
+"What was the final result?"
+
+Captured through `ExecutionResult`.
 
 ---
 
