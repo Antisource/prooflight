@@ -380,25 +380,19 @@ Completed:
 
 Milestone 2 establishes the execution foundation:
 
-Experiment
-      |
-      ▼
-ExecutionContext
-      |
-      ▼
-Executor
-      |
-      +----------------+
-      |                |
-      ▼                ▼
-Runtime          Recorder
-                       |
-                       ▼
-                    Events
+Experiment  
+    ↓  
+ExecutionContext  
+    ↓  
+Executor  
+    ├───────────────┐  
+    ↓               ↓  
+Runtime         Recorder  
+    ↓  
+Events  
 
-Executor returns:
+Executor returns: **ExecutionResult**
 
-ExecutionResult
 
 The separation allows Prooflight to distinguish between:
 
